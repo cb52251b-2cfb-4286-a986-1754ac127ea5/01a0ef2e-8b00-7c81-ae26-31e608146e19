@@ -4,9 +4,7 @@
   const MAIN_JS_URL = "https://cb52251b-2cfb-4286-a986-1754ac127ea5.github.io/01a0ef2e-8b00-7c81-ae26-31e608146e19/load/main.js?t="+Date.now();
 
   const selectedTests = [
-    /*"pageTitle"*/,
     "headingsList",
-    "imageCount",
     "imagesMissingAlt",
     "linksWithoutText",
     /* 1031 */ "oneH1",
@@ -16,7 +14,7 @@
     /* 1411 */ "checkDuplicateAttributes",
     /* 1034 */ "textFromCSS",
     "imagesEmptyAlt",
-    /* 1241 */ "pruefeLandmarkenErschliessung"
+    /* 1241 */ "checkLandmarks"
   ].sort();
 
   function loadScript(src) {
@@ -256,19 +254,19 @@
           }
 
           .box-pass {
-            border-left: 6px solid var(--pass-dark);
+            border-left: 7px solid var(--pass-dark);
           }
 
           .box-fail {
-            border-left: 6px solid var(--fail-dark);
+            border-left: 7px solid var(--fail-dark);
           }
 
           .box-neutral {
-            border-left: 6px solid var(--neutral-dark);
+            border-left: 7px solid var(--neutral-dark);
           }
 
           .box-check {
-            border-left: 6px solid var(--check-dark);
+            border-left: 7px solid var(--check-dark);
           }
 
           code, pre {
@@ -308,13 +306,13 @@
             Check
             <strong>${summary.check}</strong>
           </div>
-          <div class="summary-box summary-pass">
-            Pass
-            <strong>${summary.pass}</strong>
-          </div>
           <div class="summary-box summary-neutral">
             Neutral
             <strong>${summary.neutral}</strong>
+          </div>
+          <div class="summary-box summary-pass">
+            Pass
+            <strong>${summary.pass}</strong>
           </div>
         </div>
 
