@@ -4,7 +4,7 @@
   const MAIN_JS_URL = "https://cb52251b-2cfb-4286-a986-1754ac127ea5.github.io/01a0ef2e-8b00-7c81-ae26-31e608146e19/load/main.js?t="+Date.now();
 
   const selectedTests = [
-    "pageTitle",
+    /*"pageTitle"*/,
     "headingsList",
     "imageCount",
     "imagesMissingAlt",
@@ -13,7 +13,9 @@
     /* 1031 */ "headingJumps",
     /* 1242 */ "pruefeDokumenttitel",
     /* 1411 */ "checkIds",
-    /* 1411 */ "checkDuplicateAttributes"
+    /* 1411 */ "checkDuplicateAttributes",
+    /* 1034 */ "textFromCSS",
+    "imagesEmptyAlt"
   ].sort();
 
   function loadScript(src) {
@@ -36,7 +38,7 @@
   }
 
   function normalizeStatus(status) {
-    return ["pass", "fail", "neutral"].includes(status) ? status : "neutral";
+    return ["pass", "check", "fail", "neutral"].includes(status) ? status : "neutral";
   }
 
   function runTests(testNames) {
@@ -80,12 +82,13 @@
         acc[result.status] = (acc[result.status] || 0) + 1;
         return acc;
       },
-      { pass: 0, fail: 0, neutral: 0 }
+      { pass: 0, check: 0, fail: 0, neutral: 0 }
     );
   }
 
   function getBadgeLabel(status) {
     if (status === "pass") return "PASS";
+    if (status === "check") return "CHECK";
     if (status === "fail") return "FAIL";
     return "NEUTRAL";
   }
@@ -122,11 +125,17 @@
             --pass-dark: #0ca678;
             --pass-black: #087f5b;
 
-            --check-white: #f8f9fa;
-            --check-light: #dee2e6;
-            --check: #adb5bd;
-            --check-dark: #495057;
-            --check-black: #212529;
+            --neutral-white: #f8f9fa;
+            --neutral-light: #dee2e6;
+            --neutral: #adb5bd;
+            --neutral-dark: #495057;
+            --neutral-black: #212529;
+            
+            --check-white: #fff9db;
+            --check-light: #ffe066;
+            --check: #fcc419;
+            --check-dark: #f59f00;
+            --check-black: #e67700;
             
             --fail-white: #fff0f6;
             --fail-light: #faa2c1;
@@ -180,6 +189,11 @@
           }
 
           .summary-neutral {
+            background: var(--neutral-white);
+            border: 3px solid var(--neutral-dark);
+          }
+
+          .summary-check {
             background: var(--check-white);
             border: 3px solid var(--check-dark);
           }
@@ -231,6 +245,11 @@
           }
 
           .badge-neutral {
+            background: var(--neutral-white);
+            color: var(--neutral-dark);
+          }
+
+          .badge-check {
             background: var(--check-white);
             color: var(--check-dark);
           }
@@ -244,7 +263,7 @@
           }
 
           .box-neutral {
-            border-left: 6px solid var(--check-dark);
+            border-left: 6px solid var(--neutral-dark);
           }
 
           code, pre {
@@ -279,6 +298,10 @@
           <div class="summary-box summary-pass">
             Pass
             <strong>${summary.pass}</strong>
+          </div>
+          <div class="summary-box summary-check">
+            Check
+            <strong>${summary.check}</strong>
           </div>
           <div class="summary-box summary-fail">
             Fail
@@ -322,7 +345,7 @@
       await ensureMainLoaded();
       const results = runTests(selectedTests);
       results.sort((a, b) => {
-        const order = { fail: 0, neutral: 1, pass: 2 };
+        const order = { fail: 0, check: 1, neutral: 2, pass: 3 };
         return order[a.status] - order[b.status];
       });
       openReport(results);
