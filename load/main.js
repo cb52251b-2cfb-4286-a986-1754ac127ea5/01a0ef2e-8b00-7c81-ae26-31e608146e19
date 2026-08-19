@@ -33,7 +33,7 @@ const tests = {
     const missingAlt = images.filter(img => !img.hasAttribute("alt"));
 
     return {
-      title: "Images missing alt",
+      title: "Bilder ohne Alt-Tag",
       status: missingAlt.length === 0 ? "pass" : "fail",
       content: missingAlt.length === 0
         ? "All images have an <code>alt</code> attribute."
@@ -49,7 +49,28 @@ const tests = {
     };
   },
 
-  pageTitle() {
+  imagesEmptyAlt() {
+    const images = [...document.querySelectorAll("img")];
+    const missingAlt = images.filter(img => !img.hasAttribute("alt"));
+
+    return {
+      title: "Bilder mit leerem Alt-Tag",
+      status: "check",
+      content: missingAlt.length === 0
+        ? "All images have an <code>alt</code> attribute."
+        : `
+          <p><strong>${missingAlt.length}</strong> image(s) are missing an <code>alt</code> attribute.</p>
+          <ul>
+            ${missingAlt.slice(0, 20).map((img, i) => `
+              <li>Image ${i + 1}: ${escapeHtml(img.outerHTML.slice(0, 200))}<br>Position: <code>${getDomPath(img)}</code>${img.hasAttribute('src') ? `<br><img src="${img.src}" height="100">` : ''}</li>
+            `).join("")}
+          </ul>
+          ${missingAlt.length > 20 ? "<p>Only the first 20 are shown.</p>" : ""}
+        `
+    };
+  },
+
+  /*pageTitle() { //obsolete because of pruefeDokumenttitel
     return {
       title: "Page title",
       status: document.title ? "pass" : "fail",
@@ -57,7 +78,7 @@ const tests = {
         ? `Title: <strong>${escapeHtml(document.title)}</strong>`
         : "This page has no title."
     };
-  },
+  },*/
 
   linksWithoutText() {
     const links = [...document.querySelectorAll("a")];
@@ -143,7 +164,7 @@ const tests = {
     };
   },
 
-  pruefeDokumenttitel() {
+  pruefeDokumenttitel() { //1242
     const rawTitle = document.title || "";
     const titleText = rawTitle.trim();
 
@@ -227,26 +248,207 @@ const tests = {
       status = "neutral";
     }
 
-    const parts = [`Gefundener Titel: "${titleText}".`, `Bewertung: ${score}/100.`];
-
-    if (fehler.length) {
-      parts.push("Probleme: " + fehler.join(" "));
-    }
-
-    if (hinweise.length) {
-      parts.push("Hinweise: " + hinweise.join(" "));
-    }
-
-    if (status === "pass") {
-      parts.push("Der Titel wirkt sprechend, sinnvoll und sachlich formuliert.");
-    }
+    const parts = [`Gefundener Titel: "${titleText}".`, /*`Bewertung: ${score}/100.`*/''];
+    if (fehler.length) { parts.push("Probleme: " + fehler.join(" ")); }
+    if (hinweise.length) { parts.push("Hinweise: " + hinweise.join(" ")); }
+    if (status === "pass") { parts.push("Der Titel wirkt sprechend, sinnvoll und sachlich formuliert."); }
 
     return {
       title: "Dokumenttitel prüfen",
       status,
-      content: parts.join(" ")
+      content: parts.join("<br>")
+    };
+  },
+  
+  checkIds() {
+    const visible = (el) => {
+      if (!el || !el.isConnected) return false;
+      if (el.hidden || el.getAttribute("aria-hidden") === "true") return false;
+
+      const style = window.getComputedStyle(el);
+      if (
+        style.display === "none" ||
+        style.visibility === "hidden" ||
+        style.opacity === "0"
+      ) {
+        return false;
+      }
+
+      if (!el.offsetParent && style.position !== "fixed") return false;
+
+      return true;
+    };
+
+    const elementsWithId = Array.from(document.querySelectorAll("[id]")).filter(visible);
+
+    const idMap = new Map();
+    let emptyIds = 0;
+
+    elementsWithId.forEach((el) => {
+      const id = el.getAttribute("id") || "";
+
+      if (!id.trim()) {
+        emptyIds++;
+        return;
+      }
+
+      idMap.set(id, (idMap.get(id) || 0) + 1);
+    });
+
+    const duplicateIds = Array.from(idMap.entries()).filter(([, count]) => count > 1);
+    const issueCount = duplicateIds.length + emptyIds;
+
+    let status = "pass";
+    if (issueCount > 0 /*&& issueCount <= 3) status = "neutral";
+    if (issueCount > 3*/) status = "fail";
+
+    let content = "Keine Probleme mit IDs gefunden.";
+
+    if (issueCount > 0) {
+      content =
+        `Doppelte IDs: ${duplicateIds.length}, leere IDs: ${emptyIds}.`;
+    }
+
+    return {
+      title: "Prüfe IDs",
+      status,
+      content
+    };
+  },
+
+  checkDuplicateAttributes() {
+    const visible = (el) => {
+      if (!el || !el.isConnected) return false;
+      if (el.hidden || el.getAttribute("aria-hidden") === "true") return false;
+
+      const style = window.getComputedStyle(el);
+      if (
+        style.display === "none" ||
+        style.visibility === "hidden" ||
+        style.opacity === "0"
+      ) {
+        return false;
+      }
+
+      if (!el.offsetParent && style.position !== "fixed") return false;
+
+      return true;
+    };
+
+    const allVisibleElements = Array.from(document.querySelectorAll("*")).filter(visible);
+    const affectedElements = [];
+
+    allVisibleElements.forEach((el) => {
+      const names = Array.from(el.attributes).map((attr) => attr.name.toLowerCase());
+      const counts = new Map();
+
+      names.forEach((name) => {
+        counts.set(name, (counts.get(name) || 0) + 1);
+      });
+
+      const duplicates = Array.from(counts.entries()).filter(([, count]) => count > 1);
+
+      if (duplicates.length > 0) {
+        affectedElements.push(el);
+      }
+    });
+
+    let status = "pass";
+    if (affectedElements.length === 1) status = "neutral";
+    if (affectedElements.length > 1) status = "fail";
+
+    let content = "Keine doppelten Attribute gefunden.";
+
+    if (affectedElements.length > 0) {
+      content = `Elemente mit doppelten Attributen gefunden: ${affectedElements.length}.`;
+    }
+
+    return {
+      title: "Doppelte Attribute",
+      status,
+      content
+    };
+  },
+
+  textFromCSS() {
+    const normalizeContent = (value) => {
+      try {
+        value = String(value);
+      } catch {
+        return "";
+      }
+
+      if (value === "none" || value === '""' || value === "''") {
+        return "";
+      }
+
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
+        value = value.slice(1, -1);
+      }
+
+      return value.trim();
+    };
+
+    const results = [];
+
+    document.querySelectorAll("*").forEach((el) => {
+      let before = "";
+      let after = "";
+
+      try {
+        before = normalizeContent(getComputedStyle(el, "::before").content);
+      } catch {}
+
+      try {
+        after = normalizeContent(getComputedStyle(el, "::after").content);
+      } catch {}
+
+      const matches = [];
+
+      if (before.length > 2) {
+        matches.push(`::before = "${before}"`);
+      }
+
+      if (after.length > 2) {
+        matches.push(`::after = "${after}"`);
+      }
+
+      if (matches.length > 0) {
+        let selector = (el.tagName || "").toLowerCase();
+
+        if (el.id) {
+          selector += `#${el.id}`;
+        }
+
+        if (el.classList && el.classList.length) {
+          selector += `.${Array.from(el.classList).slice(0, 4).join(".")}`;
+        }
+
+        results.push(`${selector || "(node)"}: ${matches.join(" | ")}`);
+      }
+    });
+
+    if (results.length === 0) {
+      return {
+        title: "CSS-Text in Pseudo-Elementen",
+        status: "pass",
+        content:
+          'Kein per CSS eingebundener Text über "::before" oder "::after" mit mehr als 2 Zeichen gefunden.'
+      };
+    }
+
+    return {
+      title: "CSS-Text in Pseudo-Elementen",
+      status: "fail",
+      content:
+        `Es wurden ${results.length} Element(e) mit per CSS eingebundenem Text gefunden:\n\n` +
+        results.join("\n")
     };
   }
+
 };
 
 function escapeHtml(str) {
