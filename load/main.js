@@ -717,7 +717,7 @@ const tests = {
 
       if (uniqueErrors.length) {
         issues.push({
-          label: getSelector_codeTag(table),
+          label: getSelector(table),
           path: getDomPath(table),
           errors: uniqueErrors
         });
@@ -739,7 +739,7 @@ const tests = {
 
         orphanIssuesRaw.push({
           context: nearestContext(el),
-          label: getSelector_codeTag(el),
+          label: getSelector(el),
           path: getDomPath(el),
           message: msg
         });
@@ -752,7 +752,7 @@ const tests = {
         if (!parent || !/^(table|thead|tbody|tfoot)$/i.test(parent.tagName)) {
           orphanIssuesRaw.push({
             context: table,
-            label: getSelector_codeTag(el),
+            label: getSelector(el),
             path: getDomPath(el),
             message: "<tr> ist nicht direkt in <table>, <thead>, <tbody> oder <tfoot> verschachtelt"
           });
@@ -764,7 +764,7 @@ const tests = {
         if (!parent || parent.tagName.toLowerCase() !== "tr") {
           orphanIssuesRaw.push({
             context: table,
-            label: getSelector_codeTag(el),
+            label: getSelector(el),
             path: getDomPath(el),
             message: `<${tag}> ist kein direktes Kind eines <tr>`
           });
@@ -779,7 +779,7 @@ const tests = {
 
       if (!orphanMap.has(key)) {
         orphanMap.set(key, {
-          label: getSelector_codeTag(item.context),
+          label: getSelector(item.context),
           path: getDomPath(item.context),
           errors: []
         });
@@ -926,7 +926,7 @@ const tests = {
       if (headersElements.length) {
         errors.push(
           `Transparente Tabelle darf kein Attribut "headers" besitzen (${headersElements
-            .map((el) => getSelector_codeTag(el))
+            .map((el) => getSelector(el))
             .join(", ")})`
         );
       }
@@ -938,14 +938,14 @@ const tests = {
       if (idElements.length) {
         errors.push(
           `Transparente Tabelle darf kein Attribut "id" besitzen (${idElements
-            .map((el) => getSelector_codeTag(el))
+            .map((el) => getSelector(el))
             .join(", ")})`
         );
       }
 
       if (errors.length) {
         issues.push({
-          label: getSelector_codeTag(table),
+          label: getSelector(table),
           path: getDomPath(table),
           errors: [...new Set(errors)]
         });
@@ -1074,21 +1074,19 @@ const tests = {
         const eintraege = elemente
           .map((el) => {
             return `
-              <div class="item">
-                <div><b>&lt;${escapeHtml(tag)}&gt;</b></div>
-                <div class="sub"><b>Pfad:</b> <code>${escapeHtml(getDomPath(el))}</code></div>
-                <div class="sub"><b>HTML:</b> <code>${escapeHtml(el.outerHTML)}</code></div>
-              </div>
+              <li>
+                <code>${escapeHtml(el.outerHTML)}</code><br>
+                Position: <code>${escapeHtml(getDomPath(el))}</code>
+              </li>
             `;
           })
           .join("");
 
         return `
           <div style="margin-bottom:12px;">
-            <div><b>&lt;${escapeHtml(tag)}&gt;</b> – Treffer: <b>${elemente.length}</b></div>
-            <div style="margin-top:6px;">
+            <ul style="margin-top:6px;">
               ${eintraege}
-            </div>
+            </ul>
           </div>
         `;
       })
@@ -1760,7 +1758,7 @@ function escapeHtml(str) {
     .replaceAll("'", "&#039;");
 }
 
-function getSelector_codeTag(el) {
+function getSelector(el) {
   if (!el) return "(node)";
   let s = (el.tagName || "").toLowerCase();
 
@@ -1772,7 +1770,7 @@ function getSelector_codeTag(el) {
     s += "#" + el.id;
   }
 
-  return `<code>${(s || "(node)")}</code>`;
+  return (s || "(node)");
 }
 
 function getDomPath(el) {
