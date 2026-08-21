@@ -225,7 +225,7 @@ const tests = {
     if (score < 50) {
       status = "fail";
     } else if (score < 85) {
-      status = "neutral";
+      status = "check";
     }
 
     const parts = [`Gefundener Titel: "${titleText}".`, /*`Bewertung: ${score}/100.`*/''];
@@ -279,8 +279,7 @@ const tests = {
     const issueCount = duplicateIds.length + emptyIds;
 
     let status = "pass";
-    if (issueCount > 0 /*&& issueCount <= 3) status = "neutral";
-    if (issueCount > 3*/) status = "fail";
+    if (issueCount > 0) status = "fail";
 
     let content = "Keine Probleme mit IDs gefunden.";
 
@@ -334,8 +333,7 @@ const tests = {
     });
 
     let status = "pass";
-    if (affectedElements.length === 1) status = "neutral";
-    if (affectedElements.length > 1) status = "fail";
+    if (affectedElements.length > 0) status = "fail";
 
     let content = "Keine doppelten Attribute gefunden.";
 
@@ -532,24 +530,24 @@ const tests = {
       const presentCount = details.filter((item) => item.count > 0).length;
 
       if (presentCount < 3) {
-        status = "neutral";
+        status = "check";
         messages.push(
           `Nur ${presentCount} von 5 geprüften Landmarken wurden gefunden.`
         );
       }
 
       if (header && header.count === 0) {
-        if (status === "pass") status = "neutral";
+        if (status === "pass") status = "check";
         messages.push("Kein seitenweiter <code>header</code> gefunden.");
       }
 
       if (footer && footer.count === 0) {
-        if (status === "pass") status = "neutral";
+        if (status === "pass") status = "check";
         messages.push("Kein seitenweiter <code>footer</code> gefunden.");
       }
 
       if (nav && nav.visibleCount > 1 && nav.namedCount < nav.visibleCount) {
-        if (status === "pass") status = "neutral";
+        if (status === "pass") status = "check";
         messages.push(
           "Mehrere sichtbare <code>nav</code>-Bereiche sind nicht eindeutig benannt."
         );
@@ -809,7 +807,7 @@ const tests = {
     if (!issues.length) {
       return {
         title: "Struktur sichtbarer Tabellen prüfen",
-        status: visibleTables.length ? "pass" : "neutral",
+        status: "pass",
         content: visibleTables.length
           ? `Alle ${visibleTables.length} visuell gestalteten Tabellen sind korrekt aufgebaut und verschachtelt.`
           : "Keine visuell gestalteten Tabellen gefunden."
@@ -983,7 +981,7 @@ const tests = {
     if (!issues.length) {
       return {
         title: "Visuell transparente Tabellen prüfen",
-        status: transparentTables.length ? "pass" : "neutral",
+        status: "pass",
         content: transparentTables.length
           ? `Keine verbotenen Elemente oder Attribute in ${transparentTables.length} visuell transparenten Tabellen gefunden.`
           : "Keine visuell transparenten Tabellen gefunden."
@@ -1607,7 +1605,7 @@ const tests = {
 
     function pushFakeList(container, items) {
       const examples = items
-        .slice(0, 3)
+        .slice(0, 4)
         .map((el) => normalizeText(el.textContent))
         .filter(Boolean);
 
@@ -1719,18 +1717,13 @@ const tests = {
     if (strukturFehler.length > 0) {
       status = "fail";
     } else if (fakeLists.length > 0) {
-      status = "neutral";
+      status = "check";
     }
 
     // 5) Inhalt erzeugen
-    const totalLists = document.querySelectorAll("ul, ol").length;
-    const totalListItems = document.querySelectorAll("li").length;
-
     let content = `
       <p>Geprüft wurden alle <code>&lt;ul&gt;</code>, <code>&lt;ol&gt;</code> und <code>&lt;li&gt;</code> auf grundlegende korrekte Verwendung und Verschachtelung. Zusätzlich wurden mögliche "Fake-Listen" gesucht, bei denen Aufzählungen mit <code>&lt;p&gt;</code>-Elementen statt echter Listen ausgezeichnet sind.</p>
       <ul>
-        <li>Gefundene <code>&lt;ul&gt;/&lt;ol&gt;</code>: <strong>${totalLists}</strong></li>
-        <li>Gefundene <code>&lt;li&gt;</code>: <strong>${totalListItems}</strong></li>
         <li>Strukturfehler: <strong>${strukturFehler.length}</strong></li>
         <li>Mögliche Fake-Listen: <strong>${fakeLists.length}</strong></li>
       </ul>
@@ -1741,8 +1734,8 @@ const tests = {
       strukturFehler.forEach((entry) => {
         content += `
           <li>
-            <strong>${escapeHtml(entry.path)}</strong><br>
-            ${escapeHtml(entry.message)}
+            <strong>${escapeHtml(entry.message)}</strong><br>
+            Position: <code>${escapeHtml(entry.path)}</code>
           </li>
         `;
       });
@@ -1755,8 +1748,8 @@ const tests = {
       content += `<h4>Mögliche Fake-Listen</h4><ul>`;
       fakeLists.forEach((entry) => {
         const examplesHtml = entry.examples.length
-          ? `<br>Beispiele: ${entry.examples.map((ex) => `"${escapeHtml(ex)}"`).join(", ")}`
-          : "";
+          ? `<br>Listeneinträge: ${entry.examples.map((ex) => `"${escapeHtml(ex)}"`).join(", ")}`
+          : "(keine Listeneinträge gefunden)";
 
         const cssInfo = entry.viaCssBefore
           ? ` (Aufzählungszeichen offenbar über <code>::before</code>)`
@@ -1764,8 +1757,9 @@ const tests = {
 
         content += `
           <li>
-            <strong>${escapeHtml(entry.path)}</strong><br>
-            ${entry.count} aufeinanderfolgende <code>&lt;p&gt;</code>-Elemente wirken wie eine Liste${cssInfo}.${examplesHtml}
+            <strong>${examplesHtml}</strong><br>
+            ${entry.count} aufeinanderfolgende <code>&lt;p&gt;</code>-Elemente wirken wie eine Liste${cssInfo}<br>
+            Position: <code>${escapeHtml(entry.path)}</code>
           </li>
         `;
       });
