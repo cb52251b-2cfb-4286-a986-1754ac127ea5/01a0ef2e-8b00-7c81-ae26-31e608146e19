@@ -235,7 +235,6 @@
             align-items: center;
             justify-content: space-between;
             gap: 12px;
-            margin-bottom: 12px;
           }
 
           .box h2 {
@@ -366,11 +365,20 @@
 
         <h2>Total Score: <span style="color:var(--${ratingColor}-black); background:var(--${ratingColor}-white); padding: 0 4px; border-radius: 6px">${ratingOutput}%</span></h2>
         <canvas id="summary-chart" width="350" height="350"></canvas>
+
+        <button onclick="openBoxes()">Alle Tests ausklappen</button>
+        <button onclick="closeBoxes()">Alle Tests zuklappen</button><br>
+        <button onclick="openBoxes('-fail')">Fail ausklappen</button>
+        <button onclick="closeBoxes('-fail')">Fail zuklappen</button><br>
+        <button onclick="openBoxes('-check')">Check ausklappen</button>
+        <button onclick="closeBoxes('-check')">Check zuklappen</button><br>
+        <button onclick="openBoxes('-pass')">Pass ausklappen</button>
+        <button onclick="closeBoxes('-pass')">Pass zuklappen</button><br>
             
         ${results.map(r => `
           <details class="box box-${r.status}" ${r.status == 'pass' ? '' : 'open'}>
             <summary class="box-header">
-              <h2>${escapeHtml(r.title)}</h2>
+              <h2 class="toggleText">${escapeHtml(r.title)}</h2>
               <span class="badge badge-${r.status}">${getBadgeLabel(r.status)}</span>
             </summary>
             <div class="box-content">${r.content}</div>
@@ -379,6 +387,14 @@
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
+          function openBoxes(scope = '') {
+            document.querySelectorAll('details.box' + scope).forEach(el => el.setAttribute('open', ''));
+          }
+          
+          function closeBoxes(scope = '') {
+            document.querySelectorAll('details.box' + scope).forEach(el => el.removeAttribute('open'));
+          }
+
           const ctx = document.getElementById('summary-chart').getContext('2d');
           const data = {
             labels: ['Pass', 'Check', 'Fail'],
