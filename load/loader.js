@@ -3,6 +3,9 @@
 (function () {
   const MAIN_JS_URL = "https://cb52251b-2cfb-4286-a986-1754ac127ea5.github.io/01a0ef2e-8b00-7c81-ae26-31e608146e19/load/main.js?t="+Date.now();
 
+  const RESULTS_SORT_AtoZ = true;
+  const RESULTS_SORT_FAILtoPASS = true;
+
   const selectedTests = [
     /* 1031 */ "headingsList",
     /* 1012 */ "imagesMissingAlt",
@@ -20,8 +23,11 @@
     /* 1311 */ "pruefeLangAttribut",
     /* 8010 */ "findeKomplettLeereTags",
     /* 8020 */ "pruefeLinksImFliesstext",
-    /* 1032 */ "pruefeListenStruktur"
-  ].sort();
+    /* 1032 */ "pruefeListenStruktur",
+    /* 2135 */ "pruefeAutocompleteAttribute"
+  ];
+
+  if (RESULTS_SORT_AtoZ) selectedTests = selectedTests.sort();
 
   function loadScript(src) {
     return new Promise((resolve, reject) => {
@@ -162,6 +168,17 @@
           h1 {
             margin-top: 0;
             margin-bottom: 8px;
+          }
+
+          li {
+            padding: 5px 10px;
+            border: 2px solid var(--gray);
+            margin-top: 10px;
+            border-radius: 4px;
+          }
+
+          img {
+            box-shadow: 5px 5px 15px var(--lighter)
           }
 
           .meta {
@@ -375,18 +392,20 @@
       .replaceAll("'", "&#039;");
   }
 
-  function getRootVar(str) {
+  /*function getRootVar(str) {
     return window.getComputedStyle(document.body).getPropertyValue(str);
-  }
+  }*/
 
   async function init() {
     try {
       await ensureMainLoaded();
       const results = runTests(selectedTests);
-      results.sort((a, b) => {
-        const order = { fail: 0, check: 1, pass: 2 };
-        return order[a.status] - order[b.status];
-      });
+      if (RESULTS_SORT_FAILtoPASS) {
+        results.sort((a, b) => {
+          const order = { fail: 0, check: 1, pass: 2 };
+          return order[a.status] - order[b.status];
+        });
+      }
       openReport(results);
     } catch (err) {
       console.error("Page analyzer failed:", err);
