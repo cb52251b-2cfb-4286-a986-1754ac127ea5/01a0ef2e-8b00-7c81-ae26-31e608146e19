@@ -5,7 +5,7 @@
 
   const RESULTS_SORT_AtoZ = true;
   const RESULTS_SORT_FAILtoPASS = true;
-  /*random comment*/
+
   let selectedTests = [
     /* 1012 */ "imagesMissingAlt",
     /* 1013 */ "imagesEmptyAlt",
@@ -61,6 +61,7 @@
       if (typeof fn !== "function") {
         results.push({
           id: `Error`,
+          reqLink: 'No link',
           title: `Missing test: ${name}`,
           status: "fail",
           content: "This test name was configured in loader.js but not found in main.js."
@@ -73,6 +74,7 @@
 
         results.push({
           id: result?.id || name,
+          reqLink: result?.reqLink || 'No link',
           title: result?.title || name,
           status: normalizeStatus(result?.status),
           content: result?.content || ""
@@ -80,6 +82,7 @@
       } catch (err) {
         results.push({
           id: `Error`,
+          reqLink: 'No link',
           title: `Error in test: ${name}`,
           status: "fail",
           content: `<pre>${escapeHtml(err.message || String(err))}</pre>`
@@ -425,7 +428,8 @@
             </summary>
             <div class="box-content">
               ${r.content}
-              <small class="reqId">${escapeHtml(r.id)}</small>
+              <small class="reqId">${escapeHtml(r.id)}</small><br>
+              <a class="reqLink">${escapeHtml(r.reqLink)}</a>
             </div>
           </details>
         `).join("")}
@@ -496,8 +500,8 @@
       .replaceAll("'", "&#039;");
   }
 
-  /*function getRootVar(str) {
-    return window.getComputedStyle(document.body).getPropertyValue(str);
+  /*function getRootVar(cssVar) {
+    return window.getComputedStyle(document.body).getPropertyValue(cssVar);
   }*/
 
   async function init() {
