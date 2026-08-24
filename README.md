@@ -1,3 +1,3 @@
 <h1>Analyse und Vergleich automatisierter Prüfverfahren zur Sicherstellung der Barrierefreiheit von Webinhalten</h1>
 <p>Dieses Projekt befasst sich mit der Barrierefreiheit von Webinhalten und ist im Rahmen einer Bachelorarbeit entstanden.</p>
-<a href="https://cb52251b-2cfb-4286-a986-1754ac127ea5.github.io/01a0ef2e-8b00-7c81-ae26-31e608146e19/" target="_blank"><b>Weitere Informationen auf der Pages Seite</b></a>
+<a href="https://cb52251b-2cfb-4286-a986-1754ac127ea5.github.io/01a0ef2e-8b00-7c81-ae26-31e608146e19/" target="_blank"><b><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-right"><path stroke="none" d="M0 0h24v24H0z" fill="none" /> 	<path d="M5 12l14 0" /><path d="M13 18l6 -6" /><path d="M13 6l6 6" /></svg> Weitere Informationen auf der Pages Seite</b></a>
