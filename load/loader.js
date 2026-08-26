@@ -24,7 +24,9 @@
     /* 8020 */ "pruefeLinksImFliesstext",
     /* 1032 */ "pruefeListenStruktur",
     /* 2135 */ "pruefeAutocompleteAttribute",
-    /* 1253 */ "pruefeLabelInName"
+    /* 1253 */ "pruefeLabelInName",
+    /* 1332 */ "pruefeFormularBeschriftungen",
+    /* 1332 */ "pruefeUnzugeordneteBeschriftungen"
   ];
 
   if (RESULTS_SORT_AtoZ) selectedTests = selectedTests.sort();
@@ -429,7 +431,7 @@
             <div class="box-content">
               ${r.content}
               <small class="reqId">${escapeHtml(r.id)}</small><br>
-              <a class="reqLink" href="${escapeHtml(r.reqLink[0])}">${escapeHtml(r.reqLink[1])}</a>
+              <a class="reqLink" href="${escapeHtml(r.reqLink[0])}" target="_blank">${escapeHtml(r.reqLink[1])}</a>
             </div>
           </details>
         `).join("")}
