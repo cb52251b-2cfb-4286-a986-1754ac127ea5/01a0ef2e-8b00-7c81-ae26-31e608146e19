@@ -198,6 +198,7 @@
           li {
             padding: 4px 10px;
             border: 1px solid var(--gray);
+            border-bottom-width: 5px;
             margin-top: 5px;
             border-radius: 4px;
             box-shadow: 0 0 8px var(--lighter);
@@ -361,7 +362,7 @@
             pointer-events: none;
             background: var(--white);
             border-radius: 6px;
-            border: 2px solid var(--lighter);
+            border: 3px solid var(--lighter);
             padding: 5px 10px;
             box-shadow: 5px 5px 15px var(--lighter);
             margin: 0 10px 10px 0;
@@ -458,7 +459,7 @@
               <div class="resultContent">
                 ${r.content}
               </div>
-              <button class="popupButton removeInPopup" onclick="openPopup(this, ${escapeHtml(r.title)})">Open in popup</button>
+              <button class="popupButton removeInPopup" onclick="openPopup(this, '${escapeHtml(r.title)}')">Open in popup</button>
               <div class="reqInfo">
                 <p><span class="reqId">Projektinterne ID: ${escapeHtml(r.id)}</span><br>
                   <a class="reqLink" href="${escapeHtml(r.reqLink[0])}" target="_blank">${escapeHtml(r.reqLink[1])}</a>
