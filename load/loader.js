@@ -64,8 +64,8 @@
         results.push({
           id: `Error`,
           reqLink: ['#', 'Error'],
-          reqInfo: ['Error im Test', ''],
-          title: `Missing test: ${name}`,
+          reqInfo: [`Test ${name} nicht gefunden`, `Betroffen: ${name}`],
+          title: `Unbekannter Test: ${name}`,
           status: "crash",
           content: "This test name was configured in loader.js but not found in main.js."
         });
@@ -85,12 +85,12 @@
         });
       } catch (err) {
         results.push({
-          id: `Error`,
-          reqLink: ['#', 'Error'],
-          reqInfo: ['Error im Test', ''],
-          title: `Error in test: ${name}`,
+          id: `Error`,  
+          reqLink: ['', 'Error'],
+          reqInfo: [`${err.name} im Test`, `${name}: <code>${err.name || 'Unbekannter Fehler'}</code>`],
+          title: `${err.name} in test: ${name}`,
           status: "crash",
-          content: `<pre>${escapeHtml(err.message || String(err))}</pre>`
+          content: `<pre>${escapeHtml(err.toString() || String(err))}</pre><pre>${escapeHtml(err.stack || err)}</pre>`
         });
       }
     }
@@ -196,6 +196,10 @@
 
           a {
             color: var(--link-dark);
+          }
+
+          ol, ul {
+            padding-left: 30px;
           }
 
           li {
@@ -463,13 +467,18 @@
                 ${r.content}
               </div>
               <button class="popupButton removeInPopup" onclick="openPopup(this, '${escapeHtml(r.title)}')">Open in popup</button>
-              <div class="reqInfo">
-                <p><span class="reqId">Projektinterne ID: ${escapeHtml(r.id)}</span><br>
-                  <strong>${escapeHtml(r.reqInfo[0])}</strong><br>
-                  ${escapeHtml(r.reqInfo[1])}<br>
-                  <a class="reqLink" href="${escapeHtml(r.reqLink[0])}" target="_blank">${escapeHtml(r.reqLink[1])}</a>
-                </p>
-              </div>
+                <details>
+                  <summary>
+                    <p class="toggleText">Weitere Infos zur Anforderung</p>
+                  </summary>
+                  <div class="reqInfo">
+                    <p><strong>${escapeHtml(r.reqInfo[0])}</strong><br>
+                      ${escapeHtml(r.reqInfo[1])}<br>
+                      <a class="reqLink" href="${escapeHtml(r.reqLink[0])}" target="_blank">${escapeHtml(r.reqLink[1])}</a><br>
+                      <span class="reqId">Projektinterne ID: ${escapeHtml(r.id)}</span>
+                    </p>
+                </div>
+              </details>
             </div>
           </details>
         `).join("")}
