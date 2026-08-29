@@ -1,7 +1,7 @@
 // loader.js
 
 (function () {
-  const MAIN_JS_URL = "https://cb52251b-2cfb-4286-a986-1754ac127ea5.github.io/01a0ef2e-8b00-7c81-ae26-31e608146e19/load/main.js?t="+Date.now();
+  const MAIN_JS_URL = "https://ceb640a6-cb7e-45e9-aaf2-fbaefc740186.github.io/019cfb6d-c100-7f9c-9735-18986e56a4eb/load/main.js?t="+Date.now();
 
   const RESULTS_SORT_AtoZ = true;
   const RESULTS_SORT_FAILtoPASS = true;
@@ -10,11 +10,11 @@
     /* 1012 */ "imagesMissingAlt",
     /* 1013 */ "imagesEmptyAlt",
     /* 1244 */ "linksWithoutText",
-    /* 1031 */ "oneH1",
-    /* 1031 */ "checkHeadings",
+      /* 1031 */ "oneH1",
+      /* 1031 */ "checkHeadings",
     /* 1242 */ "pruefeDokumenttitel",
-    /* 1411 */ "checkIds",
-    /* 1411 */ "checkDuplicateAttributes",
+      /* 1411 */ "checkIds",
+      /* 1411 */ "checkDuplicateAttributes",
     /* 1034 */ "textFromCSS",
     /* 1241 */ "checkLandmarks",
     /* 1035 */ "pruefeSichtbareTabellen",
@@ -26,7 +26,8 @@
     /* 2135 */ "pruefeAutocompleteAttribute",
     /* 1253 */ "pruefeLabelInName",
     /* 1332 */ "pruefeFormularBeschriftungen",
-    /* 1038 */ "pruefeBeschriftungenStrengWCAG"
+    /* 1038 */ "pruefeBeschriftungenStrengWCAG",
+    /* 1036 */ "checkThScope"
   ];
 
   if (RESULTS_SORT_AtoZ) selectedTests = selectedTests.sort();

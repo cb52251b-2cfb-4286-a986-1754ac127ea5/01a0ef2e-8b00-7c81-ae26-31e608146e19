@@ -168,6 +168,12 @@ const tests = {
                 <strong>Sprung von &lt;h${jump.fromLevel}&gt; zu &lt;h${jump.toLevel}&gt;</strong><br>
                 <strong>"${escapeHtml((jump.from.textContent || "").trim() || "[ohne Text]")}"</strong> zu <strong>"${escapeHtml((jump.to.textContent || "").trim() || "[ohne Text]")}"</strong><br>
                 In Position: <code>${escapeHtml(getDomPath(jump.to))}</code>
+                <details class="clone">
+                  <summary><p class="toggleText">Element anzeigen</p></summary>
+                  <div class="inline-content details-content">
+                    <div class="clonedElement">${cloneEl(jump.to)}</div>
+                  </div>
+                </details>
               </li>
             `).join("")}
           </ol>
@@ -188,13 +194,19 @@ const tests = {
           <ol>
             ${invalidHeadings.slice(0, 20).map((el, i) => `
               <li>
-                <strong>&lt;${el.tagName.toLowerCase()}&gt;</strong><br>
+                <strong>Ungültiges Element: &lt;${el.tagName.toLowerCase()}&gt;</strong><br>
                 <strong>"${el.textContent}"</strong><br>
                 In Position: <code>${escapeHtml(getDomPath(el))}</code>
+                <details class="clone">
+                  <summary><p class="toggleText">Element anzeigen</p></summary>
+                  <div class="inline-content details-content">
+                    <div class="clonedElement">${cloneEl(el)}</div>
+                  </div>
+                </details>
               </li>
             `).join("")}
           </ol>
-          ${jumps.length > 20 ? "<p>Only the first 20 are shown.</p>" : ""}
+          ${invalidHeadings.length > 20 ? "<p>Only the first 20 are shown.</p>" : ""}
         `;
 
     let statusRes = jumps.length === 0 ? (headings.length === 0 ? "check" : "pass") : "fail";
@@ -205,7 +217,8 @@ const tests = {
       reqInfo: ['Prüfschritt 9.1.3.1a', 'HTML-Strukturelemente für Überschriften'],
       title: "Heading hierarchy jumps",
       status: statusRes,
-      content: `${headingJumps_content}
+      content: `${invalidHeadings_content}
+      ${headingJumps_content}
         <details>
           <summary><p class="toggleText">Alle ${headings.length} Überschriften anzeigen</code></p></summary>
           <div class="inline-content details-content">
@@ -389,7 +402,7 @@ const tests = {
             <h4>Doppelte IDs: <code>#${key}</code></h4>
             <p>Es wurden ${elements.length} Elemente mit der gesetzten ID <code>#${key}</code> gefunden.</p>
             <details class="clone">
-              <summary><p class="toggleText">Elemente anzeigen mit </p></summary>
+              <summary><p class="toggleText">Elemente anzeigen</p></summary>
               <div class="inline-content details-content">
                 ${elements.map(el => `
                   <div class="clonedElement">${cloneEl(el)}</div>
@@ -3447,6 +3460,83 @@ const tests = {
       title: "Beschriftungen und Gruppierungsbeschriftungen von Formularfeldern",
       status,
       content: summary + details
+    };
+  },
+
+  checkThScope() {
+    const validScopes = ["row", "col", "rowgroup", "colgroup"];
+    const thElements = document.querySelectorAll("th");
+    const results = [];
+    let pass = 0, check = 0, fail = 0;
+
+    if (thElements.length <= 0) {
+      return {
+        id: 'test',
+        reqLink: ['https://bitvtest.de/', 'Prüfschritt aufrufen'],
+        reqInfo: ['Prüfschritt 9.', 'Sichtbare'],
+        title: "Sichtbare",
+        status: "crash",
+        content: `
+          <p>No th found</p>
+        `
+      };
+    }
+
+    thElements.forEach((th, index) => {
+      const scope = th.getAttribute("scope");
+      
+      if (!scope) {
+        results.push({
+          el: th,
+          index,
+          valid: false,
+          message: "Missing scope attribute"
+        }); fail += 1;
+      } else if (!validScopes.includes(scope.toLowerCase())) {
+        results.push({
+          el: th,
+          index,
+          valid: false,
+          message: `Invalid scope value: "${scope}"`
+        }); fail += 1;
+      } else {
+        results.push({
+          el: th,
+          index,
+          valid: true,
+          message: "Valid scope"
+        }); pass += 1;
+      }
+    });
+
+    const thItems = results
+      .map((thEl) => `
+        <li>
+          <strong>${thEl.message}</strong><br>
+          <strong>Element:</strong> &lt;${getElTag(thEl.el)}&gt;
+
+          <details class="clone">
+            <summary><p class="toggleText">Element anzeigen</p></summary>
+            <div class="inline-content details-content">
+              <div class="clonedElement">${cloneEl(thEl.el)}</div>
+            </div>
+          </details>
+        </li>
+      `)
+    .join("");
+
+    return {
+      id: 'test',
+      reqLink: ['https://bitvtest.de/', 'Prüfschritt aufrufen'],
+      reqInfo: ['Prüfschritt 9.', 'Sichtbare'],
+      title: "Sichtbare",
+      status: "crash",
+      content: `
+        <p>Checks: ${pass} / ${check} / ${fail}</p>
+        <ol>
+          ${thItems}
+        </ol>
+      `
     };
   }
 
