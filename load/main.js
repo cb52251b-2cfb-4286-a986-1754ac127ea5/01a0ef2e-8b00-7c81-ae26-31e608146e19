@@ -3471,13 +3471,13 @@ const tests = {
 
     if (thElements.length <= 0) {
       return {
-        id: 'test',
-        reqLink: ['https://bitvtest.de/', 'Prüfschritt aufrufen'],
-        reqInfo: ['Prüfschritt 9.', 'Sichtbare'],
-        title: "Sichtbare",
-        status: "crash",
+        id: 'R1036',
+        reqLink: ['https://bitvtest.de/pruefschritt/bitv-20-web/bitv-20-web-9-1-3-1f-zuordnung-von-tabellenzellen', 'Prüfschritt aufrufen'],
+        reqInfo: ['Prüfschritt 9.1.3.1f', 'Zuordnung von Tabellenzellen'],
+        title: "Prüfe th scopes",
+        status: "pass",
         content: `
-          <p>No th found</p>
+          <p>Es wurden keine &lt;th&gt;-Elemente auf der Seite gefunden.</p>
         `
       };
     }
@@ -3500,25 +3500,21 @@ const tests = {
           message: `Invalid scope value: "${scope}"`
         }); fail += 1;
       } else {
-        results.push({
-          el: th,
-          index,
-          valid: true,
-          message: "Valid scope"
-        }); pass += 1;
+        pass += 1;
       }
     });
 
-    const thItems = results
-      .map((thEl) => `
+    const issues = results
+      .map((issue) => `
         <li>
-          <strong>${thEl.message}</strong><br>
-          <strong>Element:</strong> &lt;${getElTag(thEl.el)}&gt;
+          <strong>${issue.message}</strong><br>
+          <strong>Element:</strong> <code>${escapeHtml(getElTag(issue.el))}</code><br>
+          <strong>Position:</strong> <code>${escapeHtml(getDomPath(issue.el))}</code>
 
           <details class="clone">
             <summary><p class="toggleText">Element anzeigen</p></summary>
             <div class="inline-content details-content">
-              <div class="clonedElement">${cloneEl(thEl.el)}</div>
+              <div class="clonedElement">${cloneEl(issue.el, issue.el.closest('table'))}</div>
             </div>
           </details>
         </li>
@@ -3526,15 +3522,18 @@ const tests = {
     .join("");
 
     return {
-      id: 'test',
-      reqLink: ['https://bitvtest.de/', 'Prüfschritt aufrufen'],
-      reqInfo: ['Prüfschritt 9.', 'Sichtbare'],
-      title: "Sichtbare",
-      status: "crash",
+      id: 'R1036',
+      reqLink: ['https://bitvtest.de/pruefschritt/bitv-20-web/bitv-20-web-9-1-3-1f-zuordnung-von-tabellenzellen', 'Prüfschritt aufrufen'],
+      reqInfo: ['Prüfschritt 9.1.3.1f', 'Zuordnung von Tabellenzellen'],
+      title: "Prüfe th scopes",
+      status: fail > 0 ? "fail" : "pass",
       content: `
-        <p>Checks: ${pass} / ${check} / ${fail}</p>
+        <p>Gefundene &lt;th&gt;-Elemente: <strong>${thElements.length}</strong><br>
+          Korrekt verwendet: <strong>${pass}</strong><br>
+          Nicht eindeutig: <strong>${check}</strong><br>
+          Problematisch: <strong>${fail}</strong></p>
         <ol>
-          ${thItems}
+          ${issues}
         </ol>
       `
     };
@@ -3551,16 +3550,12 @@ function escapeHtml(str) {
     .replaceAll("'", "&#039;");
 }
 
-function highlightEl(el) {
-  el.style.border = "5px solid #f0f";
-  el.style.background = "#f0f8";
-  el.style.boxShadow = "0 0 10px #f0f8";
-}
-
-function cloneEl(el) {
+function cloneEl(el, container = null) {
   /*return el.parentElement.outerHTML;*/
   el.classList.add("highlight-temp");
-  const html = el.parentElement.outerHTML;
+  let parent = el.parentElement;
+  if (container) parent = container;
+  const html = parent.outerHTML;
   el.classList.remove("highlight-temp");
   return html;
 }
@@ -3585,10 +3580,11 @@ function getElTag(el) {
   return openingTag.slice(0, openingTag.indexOf('</'));
 }
 
-function getDomPath(el) {
+function getDomPath(el, container = null) {
   const parts = [];
   let current = el;
   let depth = 0;
+  
 
   while (current && current.nodeType === 1 && depth < 6) {
     let part = current.tagName.toLowerCase();
@@ -3603,7 +3599,9 @@ function getDomPath(el) {
       part += "." + [...current.classList].slice(0, 3).join(".");
     }
 
-    const parent = current.parentElement;
+    let parent = current.parentElement;
+    if (container) parent = container;
+    
     if (parent) {
       const sameTagSiblings = [...parent.children].filter(
         sibling => sibling.tagName === current.tagName
