@@ -1,7 +1,7 @@
 // loader.js
 
 (function () {
-  const MAIN_JS_URL = "https://ceb640a6-cb7e-45e9-aaf2-fbaefc740186.github.io/019cfb6d-c100-7f9c-9735-18986e56a4eb/load/main.js?t="+Date.now();
+  const MAIN_JS_URL = "https://cb52251b-2cfb-4286-a986-1754ac127ea5.github.io/01a0ef2e-8b00-7c81-ae26-31e608146e19/load/main.js?t="+Date.now();
 
   const RESULTS_SORT_AtoZ = true;
   const RESULTS_SORT_FAILtoPASS = true;
@@ -21,13 +21,14 @@
     /* 1037 */ "pruefeTransparenteTabellen",
     /* 1311 */ "pruefeLangAttribut",
     /* 8010 */ "findeKomplettLeereTags",
-    /* 8020 */ "pruefeLinksImFliesstext",
+    /* 1141 */ "pruefeLinksImFliesstext",
     /* 1032 */ "pruefeListenStruktur",
     /* 2135 */ "pruefeAutocompleteAttribute",
     /* 1253 */ "pruefeLabelInName",
     /* 1332 */ "pruefeFormularBeschriftungen",
     /* 1038 */ "pruefeBeschriftungenStrengWCAG",
-    /* 1036 */ "checkThScope"
+    /* 1036 */ "checkThScope",
+    /* 2146 */ "checkHorizontalScroll320"
   ];
 
   if (RESULTS_SORT_AtoZ) selectedTests = selectedTests.sort();
@@ -55,7 +56,7 @@
     return ["pass", "check", "fail"].includes(status) ? status : "check";
   }
 
-  function runTests(testNames) {
+  async function runTests(testNames) {
     const results = [];
 
     for (const name of testNames) {
@@ -74,7 +75,7 @@
       }
 
       try {
-        const result = fn();
+        const result = await fn();
 
         results.push({
           id: result?.id || name,
@@ -782,7 +783,7 @@
   async function init() {
     try {
       await ensureMainLoaded();
-      const results = runTests(selectedTests);
+      const results = await runTests(selectedTests);
       if (RESULTS_SORT_FAILtoPASS) {
         results.sort((a, b) => {
           const order = { crash: 0, fail: 1, check: 2, pass: 3 };
