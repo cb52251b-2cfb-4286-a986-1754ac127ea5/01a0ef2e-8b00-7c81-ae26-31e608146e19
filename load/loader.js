@@ -17,7 +17,7 @@
     /* 1035 */ "pruefeSichtbareTabellen",
     /* 1037 */ "pruefeTransparenteTabellen",
     /* 1311 */ "pruefeLangAttribut",
-    /* 8010 */ "findeKomplettLeereTags",
+    /* 8010 */ /*"findeKomplettLeereTags",*/
     /* 1141 */ "pruefeLinksImFliesstext",
     /* 1032 */ "pruefeListenStruktur",
     /* 2135 */ "pruefeAutocompleteAttribute",
@@ -28,7 +28,7 @@
     /* 2146 */ "checkHorizontalScroll320",
     /* 2143 */ "pruefeTextKontrast",
     /* 2144 */ "pruefeTextVergroesserung200",
-    /* */ "pruefeTextabstaendeAnpassbar"
+    /* 2148 */ "pruefeTextabstaendeAnpassbar"
   ];
 
   if (RESULTS_SORT_AtoZ) selectedTests = selectedTests.sort();
@@ -264,6 +264,14 @@
                 font-weight: 600;
             }
 
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+              margin-top: 10px;
+            }
+
             strong {
                 font-weight: 600;
             }
@@ -309,6 +317,13 @@
 
             button:hover {
                 background: var(--gray-50);
+            }
+
+            code {
+                background: var(--gray-50);
+                border: 1px solid var(--gray-200);
+                padding: 1px 3px;
+                border-radius: 3px;
             }
 
             .content {
@@ -403,6 +418,7 @@
             details {
                 border: 1px solid var(--gray-400);
                 border-radius: 6px;
+                margin-top: 5px;
             }
 
             summary {
@@ -603,6 +619,10 @@
                 transition: all 0.2s;
             }
 
+            .inline-content {
+                padding:10px;
+            }
+
             .reqInfo {
                 padding: 10px !important;
             }
@@ -689,6 +709,7 @@
             </div>
           </details>
         `).join("")}
+        <p style="color: var(--gray-700); margin-top: 30px; font-size: 0.75rem"><strong>corvin breyer / 2026</strong><br>v.01a0ef2e-8b00-7235-9aa8-02e45fd2eeb5</p>
         </div>
 
         <script>

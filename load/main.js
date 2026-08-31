@@ -316,7 +316,7 @@ const tests = {
               <li>
                 <strong>Ungültiges Element: &lt;${el.tagName.toLowerCase()}&gt;</strong><br>
                 <strong>"${el.textContent}"</strong><br>
-                In Position: <code>${escapeHtml(getDomPath(el))}</code>
+                Position: <code>${escapeHtml(getDomPath(el))}</code>
                 <details class="clone">
                   <summary><p class="toggleText">Element anzeigen</p></summary>
                   <div class="inline-content details-content">
@@ -4088,8 +4088,8 @@ const tests = {
           Erforderlicher Kontrast: <strong>${item.required}:1</strong><br>
           Simulierte Kontraste: ${escapeHtml(simulatedText)}<br>
           Hinweis: Der WCAG-Kontrast ist ausreichend, aber eine vereinfachte Farbfehlsichtigkeits-Simulation ist potenziell auffällig.<br>
-          Element: ${escapeHtml(getElTag(item.element))}<br>
-          Position: ${escapeHtml(item.path)}
+          Element: <code>${escapeHtml(getElTag(item.element))}</code><br>
+          Position: <code>${escapeHtml(item.path)}</code>
           <details class="clone">
             <summary><p class="toggleText">Element anzeigen</p></summary>
             <div class="inline-content details-content">
@@ -4687,6 +4687,9 @@ const tests = {
     try {
       if (!document.body) {
         return {
+          id: 'R2148',
+          reqLink: ['https://bitvtest.de/pruefschritt/bitv-20-web/bitv-20-web-9-1-3-5-eingabefelder-zu-nutzerdaten-vermitteln-den-zweck', 'Prüfschritt aufrufen'],
+          reqInfo: ['Prüfschritt 9.1.4.12', 'Textabstände anpassbar'],
           title: "Textabstände anpassbar",
           status: "check",
           content: "Die Prüfung konnte nicht ausgeführt werden, da kein <code>body</code>-Element gefunden wurde."
@@ -4697,6 +4700,9 @@ const tests = {
 
       if (!textElementsBefore.length) {
         return {
+          id: 'R2148',
+          reqLink: ['https://bitvtest.de/pruefschritt/bitv-20-web/bitv-20-web-9-1-3-5-eingabefelder-zu-nutzerdaten-vermitteln-den-zweck', 'Prüfschritt aufrufen'],
+          reqInfo: ['Prüfschritt 9.1.4.12', 'Textabstände anpassbar'],
           title: "Textabstände anpassbar",
           status: "check",
           content: "Es wurden keine sichtbaren Textelemente gefunden. Bitte manuell prüfen."
@@ -4751,14 +4757,9 @@ const tests = {
 
       let content = `
         <p>
-          Die Seite wurde testweise mit folgenden Textabständen geprüft:
+          Die Seite wurde mit folgenden Textabständen und Einstellungen geprüft:<br>
+          <code>line-height: 1.5</code>, <code>letter-spacing: 0.12em</code>, <code>word-spacing: 0.16em</code>, <code>margin-bottom: 2em</code>
         </p>
-        <ul>
-          <li><code>line-height: 1.5</code></li>
-          <li><code>letter-spacing: 0.12em</code></li>
-          <li><code>word-spacing: 0.16em</code></li>
-          <li><code>margin-bottom: 2em</code> für absatzähnliche Elemente</li>
-        </ul>
         <p>
           Geprüfte sichtbare Textelemente: <strong>${textElementsBefore.length}</strong>
         </p>
@@ -4795,6 +4796,9 @@ const tests = {
       }
 
       return {
+        id: 'R2148',
+        reqLink: ['https://bitvtest.de/pruefschritt/bitv-20-web/bitv-20-web-9-1-3-5-eingabefelder-zu-nutzerdaten-vermitteln-den-zweck', 'Prüfschritt aufrufen'],
+        reqInfo: ['Prüfschritt 9.1.4.12', 'Textabstände anpassbar'],
         title: "Textabstände anpassbar",
         status: status,
         content: content
@@ -4804,6 +4808,9 @@ const tests = {
       removeTextSpacingStyles();
 
       return {
+        id: 'R2148',
+        reqLink: ['https://bitvtest.de/pruefschritt/bitv-20-web/bitv-20-web-9-1-3-5-eingabefelder-zu-nutzerdaten-vermitteln-den-zweck', 'Prüfschritt aufrufen'],
+        reqInfo: ['Prüfschritt 9.1.4.12', 'Textabstände anpassbar'],
         title: "Textabstände anpassbar",
         status: "check",
         content: `
