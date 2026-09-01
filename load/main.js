@@ -4854,12 +4854,12 @@ function cloneEl(el, container = null) {
         </style>
       </head>
       <body>
-        ${clonedHtml}
+        ${html}
       </body>
     </html>
   `;
 
-  return iframe;
+  return iframe.outerHTML;
 }
 
 function getSelector(el) {
