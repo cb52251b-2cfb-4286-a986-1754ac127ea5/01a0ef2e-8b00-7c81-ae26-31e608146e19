@@ -4613,7 +4613,6 @@ const tests = {
           // Parent/Child-Überschneidungen sind normal und sollen ignoriert werden.
           if (a.el.contains(b.el) || b.el.contains(a.el)) continue;
 
-          // Sehr kleine Überlappungen ignorieren.
           if (!rectsOverlap(a.rect, b.rect)) continue;
 
           const overlapWidth =
@@ -4836,7 +4835,31 @@ function cloneEl(el, container = null) {
   if (container) parent = container;
   const html = parent.outerHTML;
   el.classList.remove("highlight-temp");
-  return html;
+  /*return html;*/
+  const iframe = document.createElement("iframe");
+  iframe.srcdoc = `
+    <!doctype html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body {
+            margin: 16px;
+          }
+
+          /*.highlight-temp {
+            outline: 4px solid #ff00c8 !important;
+            outline-offset: 4px !important;
+          }*/
+        </style>
+      </head>
+      <body>
+        ${clonedHtml}
+      </body>
+    </html>
+  `;
+
+  return iframe;
 }
 
 function getSelector(el) {
