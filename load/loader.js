@@ -333,6 +333,12 @@
               border-radius: 3px;
           }
 
+          iframe {
+            border: none;
+            width: 100%;
+            height: 400px;
+          }
+
           .content {
               max-width: 1300px;
               margin: 0 auto;
@@ -343,12 +349,6 @@
             justify-content: space-between;
             margin: 40px 0;
             flex-wrap: wrap;
-          }
-
-          .highlight-temp {
-              border: 2px solid var(--fail-600);
-              box-shadow: 0 0 10px var(--fail-500);
-              border-radius: 4px;
           }
 
           .meta {
@@ -588,9 +588,6 @@
           }
 
           .clonedElement {
-              user-select: none;
-              display: inline-block;
-              pointer-events: none;
               background: var(--gray-50);
               border-radius: 6px;
               border: 3px solid var(--gray-200);
