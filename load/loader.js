@@ -238,7 +238,7 @@
                 font-family: Arial, sans-serif;
                 line-height: 1.5;
                 margin: 0;
-                padding: 30px 20px;
+                padding: 40px 20px;
                 background: var(--gray-200);
                 color: var(--gray-970);
 
@@ -327,7 +327,6 @@
 
             code {
                 background: var(--gray-50);
-                border: 1px solid var(--gray-200);
                 padding: 1px 3px;
                 border-radius: 3px;
             }
@@ -340,6 +339,8 @@
             .headFlex {
               display: flex;
               justify-content: space-between;
+              margin: 40px;
+              flex-wrap: wrap;
             }
 
             .highlight-temp {
@@ -353,11 +354,22 @@
                 color: var(--gray-900);
             }
 
+            .score-box h2 {
+              margin:0 0 10px
+            }
+
+            .score-box {
+              padding: 15px 15px;
+              margin-bottom:24px;
+              background: var(--gray-50);
+              border-radius:6px;
+              border: 1px solid var(--gray-200)
+            }
+
             .summary {
                 display: flex;
                 gap: 10px;
                 flex-wrap: wrap;
-                margin-bottom: 24px;
             }
 
             .summary-box {
@@ -365,7 +377,7 @@
                 border: 1px solid var(--gray-300);
                 border-radius: 8px;
                 padding: 12px 16px;
-                min-width: 100px;
+                min-width: 120px;
                 font-size: 1.25rem;
                 text-align: center;
             }
@@ -634,7 +646,7 @@
             }
 
             details.reqirementDetails {
-              border: 1px solid var(--gray-300);
+              border: 1px solid var(--gray-200);
             }
 
             .reqirementDetails summary {
@@ -660,25 +672,26 @@
                 <div class="metaCount"><strong>Geprüfte Tests:</strong> ${results.length}</div>
               </div>
               
-              <h2>Gesamtwertung: <span style="color:var(--${ratingColor}-black); background:var(--${ratingColor}-white); padding: 0 4px; border-radius: 6px">${ratingOutput}%</span></h2>
-
-              <div class="summary">
-                ${summary.crash > 0 ? `
-                <div class="summary-box summary-crash">
-                  Crash
-                  <strong>${summary.crash}</strong>
-                </div>` : ''}
-                <div class="summary-box summary-fail">
-                  Fail
-                  <strong>${summary.fail}</strong>
-                </div>
-                <div class="summary-box summary-check">
-                  Check
-                  <strong>${summary.check}</strong>
-                </div>
-                <div class="summary-box summary-pass">
-                  Pass
-                  <strong>${summary.pass}</strong>
+              <div class="score-box">
+                <h2>Gesamtwertung: <span style="color:var(--${ratingColor}-black); background:var(--${ratingColor}-white); padding: 0 4px; border-radius: 6px">${ratingOutput}%</span></h2>
+                <div class="summary">
+                  ${summary.crash > 0 ? `
+                  <div class="summary-box summary-crash">
+                    Crash
+                    <strong>${summary.crash}</strong>
+                  </div>` : ''}
+                  <div class="summary-box summary-fail">
+                    Problem
+                    <strong>${summary.fail}</strong>
+                  </div>
+                  <div class="summary-box summary-check">
+                    Prüfen
+                    <strong>${summary.check}</strong>
+                  </div>
+                  <div class="summary-box summary-pass">
+                    Bestanden
+                    <strong>${summary.pass}</strong>
+                  </div>
                 </div>
               </div>
 
@@ -686,7 +699,7 @@
               <button onclick="closeBoxes()">⮞ Alle zuklappen</button>
             </div>
             <div>
-              <canvas id="summary-chart"></canvas>
+              <canvas id="summary-chart" width="500" height="300" style="max-width: 100%;"></canvas>
             </div>
           </div>
               
