@@ -745,7 +745,6 @@
         document.body.classList.remove(TEST_CLASS); //2148
         const style2148 = document.getElementById(STYLE_ID); //2148
         if (style2148) style2148.remove(); //2148
-        document.querySelectorAll('[data-scope="__bar318a5bb8aaf3e"]').forEach((el)=>{el.remove()}); //snipe remove prior execution files
 
         function cssVar(s) {
             return getComputedStyle(document.documentElement).getPropertyValue(s);
@@ -852,6 +851,7 @@
   }*/
 
   async function __bar_init() {
+    document.querySelectorAll('[data-scope="__bar318a5bb8aaf3e"]').forEach((el)=>{el.remove()}); //snipe remove prior execution files
     try {
       await ensureMainLoaded();
       const results = await runTests(selectedTests);
