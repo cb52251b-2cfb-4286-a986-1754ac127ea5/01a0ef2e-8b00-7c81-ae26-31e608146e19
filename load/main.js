@@ -12,18 +12,18 @@ const tests = {
       title: "Bilder ohne Alt-Tag",
       status: missingAlt.length === 0 ? "pass" : "fail",
       content: missingAlt.length === 0
-        ? "All images have an <code>alt</code> attribute."
+        ? "Alle Bilder haben ein vorhandenes <code>alt</code>-Attribut."
         : `
           <p><strong>${missingAlt.length}</strong> Bild(er) besitzen kein <code>alt</code>-Attribut.</p>
           <ol>
-            ${missingAlt.slice(0, 20).map((img, i) => `
+            ${missingAlt.slice(0, 15).map((img, i) => `
               <li>Element: <code>${__bar_escapeHtml(img.outerHTML.slice(0, 200))}</code><br>
               Quelle: <a href="${__bar_escapeHtml(img.src)}" target="_blank">${__bar_escapeHtml(img.src.slice(0, 200))}</a><br>
               Position: <code>${getDomPath(img)}</code>${img.hasAttribute('src') ? `<br>
               <img src="${img.src}" height="100">` : ''}</li>
             `).join("")}
           </ol>
-          ${missingAlt.length > 20 ? "<p>Es werden nur die ersten 20 Probleme angezeigt.</p>" : ""}
+          ${missingAlt.length > 15 ? "<p>Es werden nur die ersten 15 Probleme angezeigt.</p>" : ""}
         `
     };
   },
@@ -43,14 +43,14 @@ const tests = {
         : `
           <p><strong>${emptyAltImages.length}</strong> ${emptyAltImages.length == 1 ? 'Bild hat' : 'Bilder haben'} einen leeren <code>alt</code>-Tag. ${emptyAltImages.length == 1 ? 'Dieses Bild darf' : 'Diese Bilder dürfen'} daher <strong>keinen wichtigen Informationsgehalt</strong> besitzen, da diese${emptyAltImages.length == 1 ? 's' : ''} als Schmuckbild${emptyAltImages.length == 1 ? '' : 'er'} interpretiert ${emptyAltImages.length == 1 ? 'wird' : 'werden'}.<br>Bitte kontrolliere, ob das so korrekt ist.</p>
           <ol>
-            ${emptyAltImages.slice(0, 30).map((img, i) => `
+            ${emptyAltImages.slice(0, 15).map((img, i) => `
               <li>Quelle: <a href="${__bar_escapeHtml(img.src)}" target="_blank">${__bar_escapeHtml(img.src.slice(0, 200))}</a><br>
               Element: <code>${__bar_escapeHtml(img.outerHTML.slice(0, 200))}</code><br>
               Position: <code>${getDomPath(img)}</code>${img.hasAttribute('src') ? `<br>
               <img src="${img.src}" height="100">` : ''}</li>
             `).join("")}
           </ol>
-          ${emptyAltImages.length > 30 ? "<p>Es werden nur die ersten 30 Probleme angezeigt.</p>" : ""}
+          ${emptyAltImages.length > 15 ? "<p>Es werden nur die ersten 15 Probleme angezeigt.</p>" : ""}
         `
     };
   },
@@ -193,34 +193,6 @@ const tests = {
     };
   },
 
-  oneH1() { /* very likely not present anymore in loader.js because of merge with 1031:checkHeadings below */
-    const heads = [...__bar_all('h1')];
-    return {
-      id: 'R1031',
-      reqLink: ['https://bitvtest.de/pruefschritt/bitv-20-web/bitv-20-web-9-1-3-1a-html-strukturelemente-fuer-ueberschriften', 'Prüfschritt aufrufen'],
-      reqInfo: ['Prüfschritt 9.1.3.1a', 'HTML-Strukturelemente für Überschriften'],
-      title: "Einzelne H1",
-      status: (heads.length === 1) ? "pass" : "fail",
-      content: (heads.length === 1)
-        ? `<p>Überschrift: <strong>${__bar_escapeHtml(document.querySelector('h1').textContent)}</strong></p>`
-        : ((heads.length <= 0) ? "<p>Diese Seite hat keine h1.</p>" : `<p>Diese Seite hat <strong>${heads.length}</strong> <code>h1</code> Überschriften.</p>
-        <ol>
-        ${heads.map(el => `
-          <li><strong>${el.textContent}</strong><br>
-          Position: <code>${getDomPath(el)}</code>
-          <details class="clone">
-            <summary><p class="toggleText">Element anzeigen</p></summary>
-            <div class="inline-content details-content">
-              <div class="clonedElement">${cloneEl(el)}</div>
-            </div>
-          </details>
-          </li>
-        `).join("")}
-        </ol>
-        `)
-    };
-  },
-
   checkHeadings() {
     const headings = [...__bar_all("h1, h2, h3, h4, h5, h6")];
     const jumps = [];
@@ -238,7 +210,7 @@ const tests = {
 
     const head1s = [...__bar_all('h1')];
     let h1res = ['check', 'Es wurden keine H1 Überschriften auf der Seite gefunden. Dies verstößt nicht gegen die WCAG Richtlinien, ist aber auch nicht ideal oder empfohlen; vor allem, da andere Überschriften auf der Seite existieren.'];
-    if (head1s.length == 1) h1res = ['pass', `Es wurde eine H1 Überschrift auf der Seite gefunden: <strong>${head1s[0]}</strong>. Dies bildet das übliche Verhalten von Webseiten ab.`];
+    if (head1s.length == 1) h1res = ['pass', `Es wurde eine H1 Überschrift auf der Seite gefunden: <strong>${head1s[0].textContent}</strong>. Dies bildet das übliche Verhalten von Webseiten ab.`];
     if (head1s.length > 1) h1res = ['check', 'Es wurde mehr als eine H1 Überschrift auf der Seite gefunden. Dies verstößt nicht gegen die WCAG-Richtlinien, doch ist eine Seite mit nur einer H1 Überschrift häufig einfacher zu verstehen.'];
 
     for (let i = 1; i < headings.length; i++) {
@@ -285,7 +257,7 @@ const tests = {
         : `
           <p><strong>${jumps.length}</strong> Sprünge in Überschriften gefunden.</p>
           <ol>
-            ${jumps.slice(0, 20).map((jump, i) => `
+            ${jumps.slice(0, 15).map((jump, i) => `
               <li>
                 <strong>Sprung von &lt;h${jump.fromLevel}&gt; zu &lt;h${jump.toLevel}&gt;</strong><br>
                 <strong>"${__bar_escapeHtml((jump.from.textContent || "").trim() || "[ohne Text]")}"</strong> zu <strong>"${__bar_escapeHtml((jump.to.textContent || "").trim() || "[ohne Text]")}"</strong><br>
@@ -299,7 +271,7 @@ const tests = {
               </li>
             `).join("")}
           </ol>
-          ${jumps.length > 20 ? "<p>Es werden nur die ersten 20 Probleme angezeigt.</p>" : ""}
+          ${jumps.length > 15 ? "<p>Es werden nur die ersten 15 Probleme angezeigt.</p>" : ""}
         `;
 
     const invalidHeadings = [...document.querySelectorAll('*')]
@@ -314,7 +286,7 @@ const tests = {
         : `
           <p><strong>${invalidHeadings.length}</strong> invalide Überschriften gefunden.</p>
           <ol>
-            ${invalidHeadings.slice(0, 20).map((el, i) => `
+            ${invalidHeadings.slice(0, 15).map((el, i) => `
               <li>
                 <strong>Ungültiges Element: &lt;${el.tagName.toLowerCase()}&gt;</strong><br>
                 <strong>"${el.textContent}"</strong><br>
@@ -328,7 +300,7 @@ const tests = {
               </li>
             `).join("")}
           </ol>
-          ${invalidHeadings.length > 20 ? "<p>Es werden nur die ersten 20 Probleme angezeigt.</p>" : ""}
+          ${invalidHeadings.length > 15 ? "<p>Es werden nur die ersten 15 Probleme angezeigt.</p>" : ""}
         `;
 
     let resStatus = jumps.length === 0 ? (headings.length === 0 ? "check" : "pass") : "fail"; //maybe the headings.length fork is obsolete but oh well
@@ -4342,7 +4314,7 @@ const tests = {
           <p>Hinweis: Die Prüfung ersetzt keinen manuellen Test. Bitte zusätzlich prüfen, ob alle Inhalte und Funktionen bei 200% Textgröße bedienbar bleiben.</p>
         `;
       } else {
-        const maxShown = 30;
+        const maxShown = 15;
 
         const issueList = finalIssues.slice(0, maxShown).map((issue) => {
           return `
