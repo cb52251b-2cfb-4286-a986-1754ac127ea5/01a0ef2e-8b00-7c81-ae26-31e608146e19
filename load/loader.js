@@ -3,6 +3,12 @@
 
   const RESULTS_SORT_AtoZ = true;
   const RESULTS_SORT_FAILtoPASS = true;
+  const STATUS_IS_OPENED = {
+    crash: true,
+    fail: false,
+    check: true,
+    pass: false
+  };
 
   let selectedTests = [
     /* 1012 */ "imagesMissingAlt",
@@ -701,8 +707,8 @@
               <canvas id="summary-chart" width="500" height="300" style="max-width: 100%;"></canvas>
             </div>
           </div>
-              
-          ${results.map(r => `<details class="box box-${r.status}" id="${r.uuid}" ${r.status == 'pass' ? '' : 'open'}>
+
+          ${results.map(r => `<details class="box box-${r.status}" id="${r.uuid}" ${STATUS_IS_OPENED[r.status] ? 'open' : ''}>
             <summary class="box-header">
               <h2 class="toggleText">${__bar_escapeHtml(r.title)}</h2>
               <span class="badge badge-${r.status}">${getBadgeLabel(r.status)}</span>
