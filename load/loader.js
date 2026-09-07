@@ -851,7 +851,6 @@
   }*/
 
   async function __bar_init() {
-    document.querySelectorAll('[data-scope="__bar318a5bb8aaf3e"]').forEach((el)=>{el.remove()}); //snipe remove prior execution files
     try {
       await ensureMainLoaded();
       const results = await runTests(selectedTests);
@@ -867,6 +866,7 @@
       console.error("Page analyzer failed:", err);
       alert("Page analyzer failed: " + (err.message || String(err)));
     }
+    document.querySelectorAll('[data-scope="__bar318a5bb8aaf3e"]').forEach((el)=>{el.remove()}); //snipe remove prior execution files
   }
 
   __bar_init();
