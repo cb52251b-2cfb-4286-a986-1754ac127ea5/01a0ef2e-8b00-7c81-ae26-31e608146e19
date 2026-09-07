@@ -517,19 +517,19 @@
           }
 
           .box-pass {
-              border-left: 5px solid var(--pass-600);
+              border-left: 15px solid var(--pass-600);
           }
 
           .box-check {
-              border-left: 5px solid var(--check-600);
+              border-left: 15px solid var(--check-600);
           }
 
           .box-fail {
-              border-left: 5px solid var(--fail-600);
+              border-left: 15px solid var(--fail-600);
           }
 
           .box-crash {
-              border-left: 5px solid var(--crash-600);
+              border-left: 15px solid var(--crash-600);
           }
 
           .box-pass .box-header {
