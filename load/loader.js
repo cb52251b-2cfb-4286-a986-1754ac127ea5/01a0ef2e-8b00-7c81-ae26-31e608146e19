@@ -735,7 +735,7 @@
             </div>
           </details>
         `).join("")}
-        <p style="color: var(--gray-700); margin-top: 30px; font-size: 0.75rem"><strong>Corvin Breyer / 2026</strong><br>averinprojects@gmail.com<br>v.01a0ef2e-8b00-7235-9aa8-02e45fd2eeb5</p>
+        <p style="color: var(--gray-700); margin-top: 30px; font-size: 0.75rem"><strong>Corvin Breyer / 2026</strong><br>c.breyer@posteo.de<br>v.01a0ef2e-8b00-7235-9aa8-02e45fd2eeb5</p>
         </div>
 
         <script>

@@ -1407,13 +1407,13 @@ const tests = {
 
     if (!htmlEl) {
       status = "fail";
-      content = "Es konnte kein <code>&lt;html&gt;</code>-Element gefunden werden.";
+      content = "Es konnte kein <code>&lt;html&gt;</code>-Element gefunden werden. Dies gehört zu den Grundbausteinen einer Seite und sollte immer vorhanden sein.";
     } else if (!hasLang) {
       status = "fail";
-      content = `Attribut <code>lang</code> fehlt für das <code>&lt;html&gt;</code>-Element.`;
+      content = `Attribut <code>lang</code> fehlt für das <code>&lt;html&gt;</code>-Element. Dies ist wichtig, damit beispielsweise Screenreader wissen, in welcher Sprache die Seite primär ist.`;
     } else if (!langValue) {
       status = "fail";
-      content = `Das <code>&lt;html&gt;</code>-Element hat ein leeres <code>lang</code>-Attribut.`;
+      content = `Das <code>&lt;html&gt;</code>-Element hat ein leeres <code>lang</code>-Attribut. Ein korrekt ausgefüllter Wert ist wichtig, damit beispielsweise Screenreader wissen, in welcher Sprache die Seite primär ist.`;
     }
 
     content = `<p>${content}</p>`;
@@ -3628,8 +3628,8 @@ const tests = {
       .map((issue) => `
         <li>
           <strong>${issue.message}</strong><br>
-          <strong>Element:</strong> <code>${__bar_escapeHtml(getElTag(issue.el))}</code><br>
-          <strong>Position:</strong> <code>${__bar_escapeHtml(getDomPath(issue.el))}</code>
+          Element: <code>${__bar_escapeHtml(getElTag(issue.el))}</code><br>
+          Position: <code>${__bar_escapeHtml(getDomPath(issue.el))}</code>
 
           <details class="clone">
             <summary><p class="toggleText">Element anzeigen</p></summary>
@@ -3722,20 +3722,15 @@ const tests = {
             reqInfo: ["Prüfschritt 9.1.4.10", "Inhalte brechen um"],
             title: "Horizontaler Überlauf bei 320px",
             status: overflow ? "fail" : "pass",
-            content: overflow ? `
-              Die Seite läuft bei 320px Breite horizontal über.
-
-              Erkannte Viewport-Breite: \`${clientWidth}px\`  
-              Dokument Scroll-Breite: \`${scrollWidth}px\`  
-              Horizontal scrollbar: **Ja**
-
-              Ein horizontaler Überlauf wurde erkannt, da \`scrollWidth > clientWidth\`.
-              ` : `
-              Kein horizontaler Überlauf wurde bei einer Fensterbreite von 320px erkannt.
-
-              Erkannte Viewport-Breite: \`${clientWidth}px\`  
-              Dokument Scroll-Breite: \`${scrollWidth}px\`
-              `
+            content: overflow ? `<p>Die Seite läuft bei 320px Breite horizontal über und ist daher scrollbar.</p>
+            <p>Erkannte Viewport-Breite: <code>${clientWidth}px</code><br>
+              Dokument Scroll-Breite: <code>${scrollWidth}px</code>
+            </p>
+            <p>Ein horizontaler Überlauf wurde erkannt, da die Scroll-Breite größer ist als die Viewport-Breite.</p>` :
+            `<p>Kein horizontaler Überlauf wurde bei einer Fensterbreite von 320px erkannt.
+            <p>Erkannte Viewport-Breite: <code>${clientWidth}px</code><br>
+              Dokument Scroll-Breite: <code>${scrollWidth}px</code>
+            </p>`
           });
         } catch (e) {
           try {
@@ -3962,7 +3957,7 @@ const tests = {
 
     const warningHtml = warnings.map(item => {
       const simulatedText = item.cvdResults
-        .map(r => `${r.type}: <strong>${r.ratio}:1</strong>`)
+        .map(r => `${r.type}: ${r.ratio}:1`)
         .join(", ");
 
       return `<li>
@@ -4243,16 +4238,12 @@ const tests = {
         }).join("");
 
         content = `
-          <p>
-            <strong>${failIssues.length}</strong> potenzielle Fehler und
-            <strong>${checkIssues.length}</strong> manuell zu prüfende Hinweise gefunden.
-          </p>
+          <p><strong>${failIssues.length}</strong> potenzielle Fehler gefunden.<br>
+          <strong>${checkIssues.length}</strong> manuell zu prüfende Hinweise gefunden.</p>
 
-          <p>
-            Die Seite wurde mit simulierter Textvergrößerung auf 200% geprüft.
-            Besonders kritisch sind Elemente mit abgeschnittenem Text, fester Höhe,
-            verstecktem Overflow oder Ellipsen.
-          </p>
+          <p>Die Seite wurde mit simulierter Textvergrößerung auf 200% geprüft.<br>
+          Besonders kritisch sind Elemente mit abgeschnittenem Text, fester Höhe, verstecktem Overflow oder Ellipsen.</p>
+          <p>Dennoch sollte manuell geprüft werden: Sind alle Texte vollständig lesbar? Bleiben Buttons, Formulare, Navigation, etc. vollständig erreichbar und nutzbar?
 
           <ol>
             ${issueList}
@@ -4263,11 +4254,6 @@ const tests = {
               ? `<p>Es werden nur die ersten ${maxShown} von ${finalIssues.length} Treffern angezeigt.</p>`
               : ""
           }
-
-          <p>
-            Manuell prüfen: Sind alle Texte vollständig lesbar? Bleiben Buttons, Formulare,
-            Navigation, Modale und Fehlermeldungen vollständig nutzbar?
-          </p>
         `;
       }
 
