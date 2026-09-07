@@ -5,7 +5,7 @@
   const RESULTS_SORT_FAILtoPASS = true;
   const STATUS_IS_OPENED = {
     crash: true,
-    fail: false,
+    fail: true,
     check: true,
     pass: false
   };
@@ -16,14 +16,13 @@
     /* 1244 */ "linksWithoutText",
     /* 1031 */ "checkHeadings",
     /* 1242 */ "pruefeDokumenttitel",
-      /* 1411 */ "checkIds",
-      /* 1411 */ "checkDuplicateAttributes",
+    /* 1411 */ "checkIds",
+    /* 1411 */ "checkDuplicateAttributes",
     /* 1034 */ "textFromCSS",
     /* 1241 */ "checkLandmarks",
     /* 1035 */ "pruefeSichtbareTabellen",
     /* 1037 */ "pruefeTransparenteTabellen",
     /* 1311 */ "pruefeLangAttribut",
-    /* 8010 */ /*"findeKomplettLeereTags",*/
     /* 1141 */ "pruefeLinksImFliesstext",
     /* 1032 */ "pruefeListenStruktur",
     /* 2135 */ "pruefeAutocompleteAttribute",
@@ -740,6 +739,8 @@
         </div>
 
         <script>
+        const TEST_CLASS = "wcag-text-spacing-test";
+        const STYLE_ID = "wcag-text-spacing-test-style";
         document.body.style.fontSize = 'unset'; //2144
         document.body.classList.remove(TEST_CLASS); //2148
         const style2148 = document.getElementById(STYLE_ID); //2148
