@@ -1,7 +1,7 @@
-const COMPANY_NAMEx = 'Ernst Klett Verlag';
+const COMPANY_NAME = 'Ernst Klett Verlag';
 
 const tests = {
-  imagesMissingAltx() {
+  imagesMissingAlt() {
     const images = [...__bar_all("img")];
     const missingAlt = images.filter(img => !img.hasAttribute("alt"));
 
