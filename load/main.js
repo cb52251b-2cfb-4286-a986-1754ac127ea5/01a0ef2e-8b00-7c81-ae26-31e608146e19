@@ -1833,9 +1833,9 @@ const tests = {
       : "";
 
     return {
-      id: 'R8020',
-      reqLink: ['#', 'Nicht zugeordnet'],
-      reqInfo: ['R8020', 'Nicht zugeordnet'],
+      id: 'R1141',
+      reqLink: ['https://bitvtest.de/pruefschritt/bitv-20-web/bitv-20-web-9-1-4-1-ohne-farben-nutzbar', 'Prüfschritt aufrufen'],
+      reqInfo: ['Prüfschritt 9.1.4.1', 'Ohne Farben nutzbar'],
       title: "Links sollen sich durch mehr als nur die Textfarbe von anderem Text abheben",
       status: overallStatus,
       content: `
